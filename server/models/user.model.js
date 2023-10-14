@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
     password:{
         type: String,
         required: true,
-    },
+    }
 }, {timestamps: true})  //timestamp is used to store time of creation and update of user
 
 const User = mongoose.model('User', userSchema);
