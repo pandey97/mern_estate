@@ -140,8 +140,6 @@ const CreateListing = () => {
         }),
       });
       const data = await res.json();
-      console.log(data);
-      console.log(JSON.stringify(formData));
       setLoading(false);
       if (data.success === false) {
         setError(data.message);
