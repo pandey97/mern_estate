@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { getStorage } from "firebase/storage";
 import { app } from "../firebase";
+import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 
 const CreateListing = () => {
   const [files, setFiles] = useState([]);
@@ -44,7 +45,6 @@ const CreateListing = () => {
       const fileName = new Date().getTime() + file.name;
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
-
       uploadTask.on(
         "state_changed",
         (snapshot) => {
@@ -64,11 +64,10 @@ const CreateListing = () => {
     });
   };
 
-  const handleImageDelete = () => {
+  const handleImageDelete = (index) => {
     setFormData({
       ...formData,
       imageUrls: formData.imageUrls.filter((_,i)=> i !== index),
-
     })
   };
 
