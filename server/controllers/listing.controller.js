@@ -76,6 +76,7 @@ export const getListings = async (req, res, next) => {
       parking = { $in: [false, true] };
     }
 
+
     let type = req.query.type;
 
     if (type === undefined || type === 'all') {
@@ -87,7 +88,6 @@ export const getListings = async (req, res, next) => {
     const sort = req.query.sort || 'createdAt';
 
     const order = req.query.order || 'desc';
-
     const listings = await Listing.find({
       name: { $regex: searchTerm, $options: 'i' }, // $options: 'i' dont care about lower and upper case
       offer,
@@ -98,7 +98,6 @@ export const getListings = async (req, res, next) => {
       .sort({ [sort]: order })
       .limit(limit)
       .skip(startIndex);
-
     return res.status(200).json(listings);
   } catch (error) {
     next(error)
