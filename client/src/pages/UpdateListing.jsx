@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { getStorage } from "firebase/storage";
 import { app } from "../firebase";
 import { uploadBytesResumable, ref, getDownloadURL } from "firebase/storage";
 import { useSelector } from "react-redux";
-import {useNavigate} from "react-router-dom"
+import {useNavigate, useParams} from "react-router-dom"
 ;
 const CreateListing = () => {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
+  const param = useParams();
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
     imageUrls: [],
@@ -23,11 +24,25 @@ const CreateListing = () => {
     parking: false,
     furnished: false,
   });
-  console.log(formData);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  useEffect(()=>{
+    const fetchListing = async() => {
+        const listingId = param.listingId;
+        const res = await fetch(`/api/listing/get/${listingId}`);
+        const data = await res.json();
+        console.log(data);
+        if(data.success === false){
+            return;
+        }
+        setFormData(data);
+        console.log(formData);
+    };
+    fetchListing();
+  },[]);
 
   const handleImagesSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -129,7 +144,7 @@ const CreateListing = () => {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const res = await fetch("/api/listing/create", {
+      const res = await fetch(`/api/listing/update/${param.listingId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -154,7 +169,7 @@ const CreateListing = () => {
   return (
     <div className="p-3 max-w-4xl mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">
-        Create a Listing
+        Update a Listing
       </h1>
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
         <div className="flex flex-col gap-4 flex-1">
@@ -351,7 +366,7 @@ const CreateListing = () => {
               </div>
             ))}
           <button disabled={loading || uploading} className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-            {loading ? "Creating..." : "Create listing"}
+            {loading ? "Updating..." : "Update listing"}
           </button>
           {error && <p className="text-red-700 text-sm">{error}</p>}
         </div>
