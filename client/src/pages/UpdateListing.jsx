@@ -34,12 +34,10 @@ const CreateListing = () => {
         const listingId = param.listingId;
         const res = await fetch(`/api/listing/get/${listingId}`);
         const data = await res.json();
-        console.log(data);
         if(data.success === false){
             return;
         }
         setFormData(data);
-        console.log(formData);
     };
     fetchListing();
   },[]);
