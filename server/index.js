@@ -6,14 +6,11 @@ import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import listingRouter from './routes/listing.route.js';
 import cookieParser from "cookie-parser";
+import connectDB from "./config/db.js";
 
 dotenv.config();
 
-mongoose.connect(process.env.MONGO).then(()=>{
-    console.log("Connected to MongoDB!");
-}).catch((err) => {
-    console.log(err);
-});
+connectDB();
 
 const app = express();
 
@@ -23,7 +20,7 @@ app.use(cors());
 
 app.use(cookieParser());
 
-app.listen(3000, () => {
+app.listen(8080, () => {
     console.log("server is running on port 3000");
 })
 
