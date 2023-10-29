@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import userRouter from './routes/user.route.js';
@@ -20,7 +19,7 @@ app.use(cors());
 
 app.use(cookieParser());
 
-app.listen(8080, () => {
+app.listen(3000, () => {
     console.log("server is running on port 3000");
 })
 
